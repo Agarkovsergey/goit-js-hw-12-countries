@@ -15,7 +15,10 @@ inputEl.addEventListener('input', debounce(onInput, 500));
 function onInput(e) {
   //   const inputText = inputEl.value;
   resetPage();
-  const searchQuery = e.target.value;
+  const searchQuery = e.target.value.trim();
+  inputEl.value = searchQuery;
+  if (searchQuery.length === 0) return
+  
   fetchCountry(searchQuery)
     .then(countries => {
       if (countries.length > 10) {
@@ -29,12 +32,13 @@ function onInput(e) {
         });
         return;
       }
-      if (countries.length <= 10 && countries.length > 1) {
+      if (countries.length <= 10 && countries.length >= 2) {
         renderCountriesList(countries);
         return;
       }
       if (countries.length === 1) {
         renderCountryCard(countries);
+        inputEl.value = '';
         return;
       }
     })
